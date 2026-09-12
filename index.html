@@ -1,0 +1,4076 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Mision de Colores - Mystery PRO</title>
+
+<style>
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,body{
+    min-height:100%;
+}
+
+body{
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color:#fff;
+
+    background:
+        radial-gradient(
+            circle at 15% 15%,
+            rgba(72,116,255,.20),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(160,80,255,.16),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(0,230,150,.10),
+            transparent 35%
+        ),
+        #040713;
+
+    overflow-x:hidden;
+}
+
+
+/* =========================================================
+   PARTICULAS
+========================================================= */
+
+#particles{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    overflow:hidden;
+    z-index:0;
+}
+
+.particle{
+    position:absolute;
+
+    width:3px;
+    height:3px;
+
+    border-radius:50%;
+
+    background:#fff;
+
+    opacity:.35;
+
+    animation:
+        particleMove
+        linear infinite;
+}
+
+@keyframes particleMove{
+
+    from{
+        transform:
+            translateY(110vh)
+            translateX(0);
+    }
+
+    to{
+        transform:
+            translateY(-10vh)
+            translateX(100px);
+    }
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app{
+    position:relative;
+    z-index:2;
+
+    width:min(1150px,94vw);
+
+    margin:auto;
+
+    padding:30px 0 60px;
+}
+
+
+/* =========================================================
+   PANEL
+========================================================= */
+
+.panel{
+    background:
+        linear-gradient(
+            145deg,
+            rgba(19,28,61,.92),
+            rgba(5,9,23,.94)
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    border-radius:30px;
+
+    padding:30px;
+
+    backdrop-filter:blur(22px);
+
+    box-shadow:
+        0 30px 100px
+        rgba(0,0,0,.60),
+
+        inset 0 1px 0
+        rgba(255,255,255,.06);
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.logo{
+    text-align:center;
+
+    font-size:
+        clamp(35px,7vw,65px);
+
+    font-weight:1000;
+
+    letter-spacing:-3px;
+
+    text-shadow:
+        0 0 35px
+        rgba(255,255,255,.20);
+}
+
+.subtitle{
+    text-align:center;
+
+    color:#9ba8d0;
+
+    line-height:1.6;
+
+    margin-top:10px;
+}
+
+
+/* =========================================================
+   LOBBY
+========================================================= */
+
+.players{
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:16px;
+
+    margin-top:30px;
+}
+
+.player{
+    position:relative;
+
+    padding:20px;
+
+    border-radius:22px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid
+        rgba(255,255,255,.09);
+
+    transition:.3s;
+
+    overflow:hidden;
+}
+
+.player:hover{
+    transform:translateY(-5px);
+
+    background:
+        rgba(255,255,255,.065);
+}
+
+.player.ready{
+    border-color:
+        var(--playerColor);
+
+    box-shadow:
+        0 0 30px
+        rgba(255,255,255,.05);
+}
+
+.color-orb{
+    width:50px;
+    height:50px;
+
+    border-radius:50%;
+
+    background:
+        var(--playerColor);
+
+    box-shadow:
+        0 0 28px
+        var(--playerColor);
+
+    margin-bottom:15px;
+}
+
+.player-number{
+    color:#8e9abd;
+
+    font-size:11px;
+
+    letter-spacing:3px;
+
+    font-weight:bold;
+}
+
+.player-color-name{
+    font-size:23px;
+
+    font-weight:900;
+
+    margin-bottom:15px;
+}
+
+input{
+    width:100%;
+
+    padding:13px;
+
+    border-radius:13px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.10);
+
+    background:
+        rgba(0,0,0,.25);
+
+    color:white;
+
+    outline:none;
+
+    margin-bottom:10px;
+}
+
+input:focus{
+    border-color:
+        var(--playerColor);
+}
+
+button{
+    border:0;
+
+    border-radius:13px;
+
+    padding:13px 18px;
+
+    color:white;
+
+    font-weight:900;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+
+    filter:brightness(1.12);
+}
+
+button:active{
+    transform:scale(.97);
+}
+
+.ready-btn{
+    width:100%;
+
+    background:
+        rgba(73,115,255,.85);
+}
+
+.player.ready .ready-btn{
+    background:
+        rgba(28,218,130,.85);
+}
+
+.status{
+    text-align:center;
+
+    margin-top:25px;
+
+    color:#9ba8d0;
+
+    font-weight:bold;
+}
+
+.start-btn{
+    display:block;
+
+    margin:20px auto 0;
+
+    padding:17px 35px;
+
+    font-size:18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #20e48a,
+            #119d68
+        );
+
+    box-shadow:
+        0 12px 35px
+        rgba(32,228,138,.18);
+}
+
+.start-btn:disabled{
+    opacity:.35;
+
+    cursor:not-allowed;
+
+    transform:none;
+}
+
+
+/* =========================================================
+   SECRET SCREEN
+========================================================= */
+
+#missionScreen{
+    display:none;
+
+    min-height:680px;
+
+    text-align:center;
+}
+
+.turn-label{
+    color:#9ba8d0;
+
+    font-size:12px;
+
+    letter-spacing:5px;
+
+    font-weight:bold;
+}
+
+.person-title{
+    font-size:
+        clamp(38px,7vw,65px);
+
+    font-weight:1000;
+
+    margin-top:8px;
+}
+
+.color-orb-large{
+    width:82px;
+    height:82px;
+
+    margin:22px auto;
+
+    border-radius:50%;
+
+    background:
+        var(--playerColor);
+
+    box-shadow:
+        0 0 60px
+        var(--playerColor);
+}
+
+.secret-warning{
+    color:#ffcf54;
+
+    font-size:12px;
+
+    letter-spacing:2px;
+
+    font-weight:bold;
+
+    margin-top:12px;
+}
+
+
+/* =========================================================
+   SECRET CARD
+========================================================= */
+
+.secret-area{
+    height:360px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    margin-top:15px;
+
+    touch-action:none;
+}
+
+.secret-card{
+    width:min(550px,94%);
+
+    height:310px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border-radius:30px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.15);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(39,51,94,.96),
+            rgba(6,10,25,.98)
+        );
+
+    box-shadow:
+        0 30px 80px
+        rgba(0,0,0,.55),
+
+        inset 0 1px 0
+        rgba(255,255,255,.08);
+
+    user-select:none;
+
+    transition:
+        transform .45s ease,
+        opacity .45s ease;
+}
+
+.secret-card.dragging{
+    transition:none;
+}
+
+.lock-icon{
+    font-size:72px;
+
+    filter:
+        drop-shadow(
+            0 0 18px
+            rgba(255,255,255,.2)
+        );
+}
+
+.swipe-title{
+    margin-top:18px;
+
+    font-size:24px;
+
+    font-weight:1000;
+}
+
+.swipe-description{
+    color:#9ba8d0;
+
+    margin-top:8px;
+}
+
+.swipe-arrow{
+    font-size:45px;
+
+    margin-top:15px;
+
+    animation:
+        arrowMove
+        1.2s infinite;
+}
+
+@keyframes arrowMove{
+
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-14px);
+    }
+}
+
+
+/* =========================================================
+   REVEAL
+========================================================= */
+
+.revealed{
+    display:none;
+
+    width:min(550px,94%);
+
+    min-height:320px;
+
+    padding:30px;
+
+    border-radius:30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(35,48,91,.98),
+            rgba(6,10,25,.98)
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.15);
+
+    box-shadow:
+        0 30px 80px
+        rgba(0,0,0,.55);
+}
+
+.role-title{
+    font-size:13px;
+
+    letter-spacing:4px;
+
+    color:#aab5d7;
+
+    font-weight:bold;
+}
+
+.role-name{
+    font-size:
+        clamp(34px,6vw,55px);
+
+    font-weight:1000;
+
+    margin-top:8px;
+}
+
+.role-description{
+    color:#aeb9d8;
+
+    line-height:1.5;
+
+    margin-top:10px;
+}
+
+.mission-label{
+    margin-top:22px;
+
+    color:#aab5d7;
+
+    font-size:11px;
+
+    letter-spacing:3px;
+
+    font-weight:bold;
+}
+
+.mission-text{
+    font-size:20px;
+
+    line-height:1.5;
+
+    font-weight:bold;
+
+    margin-top:8px;
+}
+
+.difficulty{
+    margin-top:15px;
+
+    font-size:20px;
+}
+
+.only-once{
+    margin-top:13px;
+
+    color:#7986ad;
+
+    font-size:11px;
+}
+
+.continue-btn{
+    display:none;
+
+    margin:18px auto 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            #20e48a,
+            #119d68
+        );
+
+    padding:16px 40px;
+
+    font-size:17px;
+}
+
+
+/* =========================================================
+   PRIVACY TRANSITION
+========================================================= */
+
+#handoff{
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:15;
+
+    background:
+        rgba(2,5,15,.97);
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    padding:25px;
+}
+
+.handoff-card{
+    width:min(500px,95%);
+
+    padding:40px;
+
+    border-radius:28px;
+
+    background:
+        rgba(18,27,57,.95);
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    box-shadow:
+        0 30px 100px
+        rgba(0,0,0,.6);
+}
+
+.handoff-icon{
+    font-size:70px;
+}
+
+.handoff-title{
+    font-size:32px;
+
+    font-weight:1000;
+
+    margin-top:15px;
+}
+
+.handoff-text{
+    color:#9ba8d0;
+
+    margin-top:10px;
+
+    line-height:1.5;
+}
+
+.handoff-btn{
+    margin-top:25px;
+
+    background:
+        #20e48a;
+}
+
+
+/* =========================================================
+   COUNTDOWN
+========================================================= */
+
+#countdown{
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:20;
+
+    background:
+        rgba(2,5,15,.97);
+
+    justify-content:center;
+
+    align-items:center;
+
+    flex-direction:column;
+}
+
+.count-number{
+    font-size:
+        clamp(110px,25vw,250px);
+
+    font-weight:1000;
+
+    text-shadow:
+        0 0 60px
+        rgba(255,255,255,.4);
+
+    animation:
+        countPop
+        .9s ease;
+}
+
+.count-text{
+    color:#9ba8d0;
+
+    letter-spacing:6px;
+
+    font-size:14px;
+}
+
+@keyframes countPop{
+
+    0%{
+        transform:scale(.2);
+
+        opacity:0;
+    }
+
+    50%{
+        transform:scale(1.15);
+
+        opacity:1;
+    }
+
+    100%{
+        transform:scale(1);
+    }
+}
+
+
+/* =========================================================
+   GAME SCREEN
+========================================================= */
+
+#gameScreen{
+    display:none;
+}
+
+.game-header{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+}
+
+.game-title{
+    font-size:
+        clamp(30px,5vw,48px);
+
+    font-weight:1000;
+}
+
+.game-subtitle{
+    color:#9ba8d0;
+
+    margin-top:8px;
+}
+
+.restart-btn{
+    background:
+        rgba(255,74,98,.85);
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+.timer{
+    margin-top:25px;
+
+    padding:20px;
+
+    border-radius:20px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    text-align:center;
+}
+
+.timer-label{
+    color:#8996bc;
+
+    font-size:11px;
+
+    letter-spacing:3px;
+}
+
+.timer-value{
+    font-size:40px;
+
+    font-weight:1000;
+
+    margin-top:5px;
+}
+
+
+/* =========================================================
+   EVENT
+========================================================= */
+
+.event-box{
+    display:none;
+
+    margin-top:20px;
+
+    padding:20px;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(151,103,255,.16),
+            rgba(66,116,255,.08)
+        );
+
+    border:
+        1px solid
+        rgba(151,103,255,.3);
+}
+
+.event-title{
+    color:#beaaff;
+
+    font-size:11px;
+
+    letter-spacing:3px;
+
+    font-weight:bold;
+}
+
+.event-name{
+    font-size:25px;
+
+    font-weight:1000;
+
+    margin-top:7px;
+}
+
+.event-description{
+    color:#aeb9d8;
+
+    margin-top:7px;
+
+    line-height:1.5;
+}
+
+
+/* =========================================================
+   PLAYER STATUS
+========================================================= */
+
+.status-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:15px;
+
+    margin-top:22px;
+}
+
+.status-card{
+    padding:18px;
+
+    border-radius:20px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    border-top:
+        5px solid
+        var(--playerColor);
+}
+
+.status-dot{
+    width:14px;
+    height:14px;
+
+    border-radius:50%;
+
+    background:
+        var(--playerColor);
+
+    box-shadow:
+        0 0 15px
+        var(--playerColor);
+
+    display:inline-block;
+
+    margin-right:7px;
+}
+
+.status-name{
+    font-size:18px;
+
+    font-weight:900;
+}
+
+.status-state{
+    margin-top:10px;
+
+    color:#9ba8d0;
+
+    font-size:13px;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.actions{
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:15px;
+
+    margin-top:22px;
+}
+
+.action-btn{
+    padding:18px;
+
+    font-size:16px;
+}
+
+.meeting-btn{
+    background:
+        linear-gradient(
+            135deg,
+            #687cff,
+            #4a52cf
+        );
+}
+
+.mission-btn{
+    background:
+        linear-gradient(
+            135deg,
+            #20e48a,
+            #119d68
+        );
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal{
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:40;
+
+    background:
+        rgba(2,5,15,.94);
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:20px;
+}
+
+.modal-card{
+    width:min(600px,95%);
+
+    max-height:90vh;
+
+    overflow:auto;
+
+    padding:30px;
+
+    border-radius:28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #17234b,
+            #070c20
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    box-shadow:
+        0 30px 100px
+        rgba(0,0,0,.65);
+}
+
+.modal-title{
+    font-size:30px;
+
+    font-weight:1000;
+
+    margin-bottom:20px;
+}
+
+.close-btn{
+    background:
+        rgba(255,255,255,.08);
+
+    margin-top:20px;
+}
+
+
+/* =========================================================
+   VOTACION
+========================================================= */
+
+.vote-list{
+    display:grid;
+
+    gap:10px;
+}
+
+.vote-player{
+    padding:15px;
+
+    border-radius:14px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.vote-player:hover{
+    background:
+        rgba(255,255,255,.10);
+}
+
+.vote-player.selected{
+    border-color:#6e80ff;
+
+    background:
+        rgba(100,115,255,.15);
+}
+
+.vote-result{
+    margin-top:20px;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    color:#aeb9d8;
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.progress-box{
+    margin-top:22px;
+
+    padding:20px;
+
+    border-radius:20px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+}
+
+.progress-text{
+    color:#aeb9d8;
+
+    margin-top:7px;
+}
+
+.progress-bar{
+    height:14px;
+
+    margin-top:12px;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    background:#030612;
+}
+
+.progress-fill{
+    width:0%;
+
+    height:100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #20e48a,
+            #6effbc
+        );
+
+    transition:.5s;
+}
+
+
+/* =========================================================
+   VICTORIA
+========================================================= */
+
+#victory{
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:60;
+
+    background:
+        rgba(2,5,15,.97);
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:20px;
+}
+
+.victory-card{
+    width:min(650px,95%);
+
+    padding:45px;
+
+    text-align:center;
+
+    border-radius:32px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #182653,
+            #070c20
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.15);
+
+    box-shadow:
+        0 30px 100px
+        rgba(0,0,0,.65);
+}
+
+.victory-icon{
+    font-size:90px;
+}
+
+.victory-title{
+    font-size:
+        clamp(40px,8vw,70px);
+
+    font-weight:1000;
+
+    margin-top:12px;
+}
+
+.victory-text{
+    color:#aeb9d8;
+
+    line-height:1.6;
+
+    margin-top:10px;
+}
+
+.victory-btn{
+    margin-top:25px;
+
+    background:#20e48a;
+
+    font-size:18px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:850px){
+
+    .players,
+    .status-grid{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:550px){
+
+    .players,
+    .status-grid,
+    .actions{
+        grid-template-columns:1fr;
+    }
+
+    .panel{
+        padding:20px;
+    }
+
+    .secret-area{
+        height:330px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div id="particles"></div>
+
+
+<div class="app">
+
+
+<!-- =====================================================
+     LOBBY
+===================================================== -->
+
+<section id="lobby" class="panel">
+
+    <div class="logo">
+        MISION DE COLORES
+    </div>
+
+    <div class="subtitle">
+
+        Modo Mystery PRO
+
+        <br>
+
+        4 jugadores · Roles secretos · Misiones · Reuniones
+
+    </div>
+
+
+    <div
+        id="players"
+        class="players"
+    ></div>
+
+
+    <div
+        id="status"
+        class="status"
+    >
+        0/4 jugadores listos
+    </div>
+
+
+    <button
+        id="startButton"
+        class="start-btn"
+        disabled
+    >
+        🚀 INICIAR PARTIDA
+    </button>
+
+</section>
+
+
+
+<!-- =====================================================
+     TURNO SECRETO
+===================================================== -->
+
+<section
+    id="missionScreen"
+    class="panel"
+>
+
+    <div class="turn-label">
+        INFORMACION CONFIDENCIAL
+    </div>
+
+
+    <div
+        id="playerTitle"
+        class="person-title"
+    >
+        PERSONA 1
+    </div>
+
+
+    <div
+        id="missionColor"
+        class="color-orb-large"
+    ></div>
+
+
+    <div class="subtitle">
+
+        Asegurate de que nadie este mirando.
+
+    </div>
+
+
+    <div class="secret-warning">
+
+        🔒 TU INFORMACION ES SECRETA
+
+    </div>
+
+
+    <div
+        id="secretArea"
+        class="secret-area"
+    >
+
+        <div
+            id="secretCard"
+            class="secret-card"
+        >
+
+            <div class="lock-icon">
+                🔐
+            </div>
+
+            <div class="swipe-title">
+                DESLIZA HACIA ARRIBA
+            </div>
+
+            <div class="swipe-description">
+                Descubre tu clase y tu mision
+            </div>
+
+            <div class="swipe-arrow">
+                ⬆️
+            </div>
+
+        </div>
+
+
+        <div
+            id="revealed"
+            class="revealed"
+        >
+
+            <div class="role-title">
+                TU CLASE
+            </div>
+
+            <div
+                id="roleName"
+                class="role-name"
+            ></div>
+
+            <div
+                id="roleDescription"
+                class="role-description"
+            ></div>
+
+
+            <div class="mission-label">
+                TU MISION SECRETA
+            </div>
+
+            <div
+                id="missionText"
+                class="mission-text"
+            ></div>
+
+            <div
+                id="difficulty"
+                class="difficulty"
+            ></div>
+
+            <div class="only-once">
+                🔒 Recorda tu informacion.
+                Esta pantalla no volvera a aparecer.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <button
+        id="continueButton"
+        class="continue-btn"
+    >
+        CONTINUAR ➜
+    </button>
+
+</section>
+
+
+
+<!-- =====================================================
+     JUEGO
+===================================================== -->
+
+<section
+    id="gameScreen"
+    class="panel"
+>
+
+    <div class="game-header">
+
+        <div>
+
+            <div class="game-title">
+                🕵️ MYSTERY
+            </div>
+
+            <div class="game-subtitle">
+                Completen sus objetivos y descubran quien miente.
+            </div>
+
+        </div>
+
+
+        <button
+            id="restartButton"
+            class="restart-btn"
+        >
+            🔄 NUEVA PARTIDA
+        </button>
+
+    </div>
+
+
+    <!-- TIMER -->
+
+    <div class="timer">
+
+        <div class="timer-label">
+            TIEMPO RESTANTE
+        </div>
+
+        <div
+            id="timerValue"
+            class="timer-value"
+        >
+            10:00
+        </div>
+
+    </div>
+
+
+    <!-- EVENTO -->
+
+    <div
+        id="eventBox"
+        class="event-box"
+    >
+
+        <div class="event-title">
+            ⚡ EVENTO ESPECIAL
+        </div>
+
+        <div
+            id="eventName"
+            class="event-name"
+        ></div>
+
+        <div
+            id="eventDescription"
+            class="event-description"
+        ></div>
+
+    </div>
+
+
+    <!-- ESTADOS -->
+
+    <div
+        id="statusGrid"
+        class="status-grid"
+    ></div>
+
+
+    <!-- ACCIONES -->
+
+    <div class="actions">
+
+        <button
+            id="missionAction"
+            class="action-btn mission-btn"
+        >
+            🎯 VER ESTADO DE MISIONES
+        </button>
+
+
+        <button
+            id="meetingButton"
+            class="action-btn meeting-btn"
+        >
+            📢 CONVOCAR REUNION
+        </button>
+
+    </div>
+
+
+    <!-- PROGRESO -->
+
+    <div class="progress-box">
+
+        <strong>
+            🏆 PROGRESO DE INOCENTES
+        </strong>
+
+        <div
+            id="progressText"
+            class="progress-text"
+        >
+            0 misiones completadas
+        </div>
+
+        <div class="progress-bar">
+
+            <div
+                id="progressFill"
+                class="progress-fill"
+            ></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</div>
+
+
+
+<!-- =====================================================
+     HANDOFF
+===================================================== -->
+
+<div id="handoff">
+
+    <div class="handoff-card">
+
+        <div class="handoff-icon">
+            🔒
+        </div>
+
+        <div
+            id="handoffTitle"
+            class="handoff-title"
+        >
+            INFORMACION GUARDADA
+        </div>
+
+        <div class="handoff-text">
+
+            Pasa el dispositivo al siguiente jugador.
+
+            <br><br>
+
+            Nadie debe mirar la informacion anterior.
+
+        </div>
+
+        <button
+            id="handoffButton"
+            class="handoff-btn"
+        >
+            CONTINUAR
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     COUNTDOWN
+===================================================== -->
+
+<div id="countdown">
+
+    <div
+        id="countNumber"
+        class="count-number"
+    >
+        3
+    </div>
+
+    <div class="count-text">
+        LA PARTIDA COMIENZA
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     MODAL DE MISIONES
+===================================================== -->
+
+<div
+    id="missionModal"
+    class="modal"
+>
+
+    <div class="modal-card">
+
+        <div class="modal-title">
+            🎯 ESTADO DE MISIONES
+        </div>
+
+        <div id="missionList"></div>
+
+        <button
+            id="closeMission"
+            class="close-btn"
+        >
+            CERRAR
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     MODAL DE REUNION
+===================================================== -->
+
+<div
+    id="meetingModal"
+    class="modal"
+>
+
+    <div class="modal-card">
+
+        <div class="modal-title">
+            📢 REUNION
+        </div>
+
+        <div class="subtitle">
+
+            Elijan a quien quieren investigar.
+
+            <br>
+
+            Solo es una votacion del juego.
+
+        </div>
+
+        <br>
+
+        <div
+            id="voteList"
+            class="vote-list"
+        ></div>
+
+        <div
+            id="voteResult"
+            class="vote-result"
+        >
+            Ningun jugador seleccionado.
+        </div>
+
+        <button
+            id="voteButton"
+            class="meeting-btn"
+            style="margin-top:15px;width:100%;"
+            disabled
+        >
+            🗳️ VOTAR
+        </button>
+
+        <button
+            id="closeMeeting"
+            class="close-btn"
+            style="width:100%;"
+        >
+            CERRAR
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     MODAL DE ACCION DEL ASESINO
+===================================================== -->
+
+<div
+    id="killerModal"
+    class="modal"
+>
+
+    <div class="modal-card">
+
+        <div class="modal-title">
+            🔪 ACCION SECRETA
+        </div>
+
+        <div class="subtitle">
+
+            Elegi un jugador para eliminarlo
+            <b>dentro de la partida</b>.
+
+            <br><br>
+
+            Esto no tiene ningun efecto fuera del juego.
+
+        </div>
+
+        <br>
+
+        <div
+            id="killerList"
+            class="vote-list"
+        ></div>
+
+        <button
+            id="killerButton"
+            class="restart-btn"
+            style="margin-top:15px;width:100%;"
+            disabled
+        >
+            🔪 ELIMINAR DEL JUEGO
+        </button>
+
+        <button
+            id="closeKiller"
+            class="close-btn"
+            style="width:100%;"
+        >
+            CANCELAR
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     VICTORIA
+===================================================== -->
+
+<div id="victory">
+
+    <div class="victory-card">
+
+        <div
+            id="victoryIcon"
+            class="victory-icon"
+        >
+            🏆
+        </div>
+
+        <div
+            id="victoryTitle"
+            class="victory-title"
+        >
+            VICTORIA
+        </div>
+
+        <div
+            id="victoryText"
+            class="victory-text"
+        ></div>
+
+        <button
+            id="victoryButton"
+            class="victory-btn"
+        >
+            🔄 JUGAR OTRA VEZ
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   COLORES
+========================================================= */
+
+const colors = [
+
+    {
+        name:"ROJO",
+        hex:"#ff465d"
+    },
+
+    {
+        name:"AZUL",
+        hex:"#438cff"
+    },
+
+    {
+        name:"VERDE",
+        hex:"#31df7e"
+    },
+
+    {
+        name:"AMARILLO",
+        hex:"#ffd43d"
+    }
+
+];
+
+
+/* =========================================================
+   ROLES
+========================================================= */
+
+const roleInfo = {
+
+    ASESINO:{
+        icon:"🔪",
+        color:"#ff465d",
+
+        description:
+            "Tu objetivo es completar tus objetivos secretos y conseguir que el equipo no descubra tu identidad."
+    },
+
+    SHERIFF:{
+        icon:"⭐",
+        color:"#ffd43d",
+
+        description:
+            "Tu objetivo es descubrir al asesino antes de que consiga dominar la partida."
+    },
+
+    INOCENTE:{
+        icon:"👤",
+        color:"#43d17a",
+
+        description:
+            "Completa tus misiones y ayuda al equipo a descubrir al asesino."
+    }
+
+};
+
+
+/* =========================================================
+   MISIONES
+========================================================= */
+
+const missions = [
+
+    {
+        text:
+            "Encuentra el objeto secreto escondido en la zona norte.",
+        difficulty:2
+    },
+
+    {
+        text:
+            "Activa 3 interruptores diferentes sin decir donde estan.",
+        difficulty:3
+    },
+
+    {
+        text:
+            "Encuentra la llave escondida y llevala hasta la puerta principal.",
+        difficulty:3
+    },
+
+    {
+        text:
+            "Consigue 5 monedas y guardalas en el cofre central.",
+        difficulty:2
+    },
+
+    {
+        text:
+            "Encuentra el boton secreto y activalo una sola vez.",
+        difficulty:4
+    },
+
+    {
+        text:
+            "Visita las 3 zonas marcadas del mapa sin ayuda.",
+        difficulty:3
+    },
+
+    {
+        text:
+            "Encuentra el objeto de tu color y llevalo hasta el centro.",
+        difficulty:2
+    },
+
+    {
+        text:
+            "Descubre el camino secreto y llega hasta el punto final.",
+        difficulty:4
+    },
+
+    {
+        text:
+            "Encuentra el cofre escondido detras de una puerta.",
+        difficulty:3
+    },
+
+    {
+        text:
+            "Activa el mecanismo secreto de la torre.",
+        difficulty:4
+    },
+
+    {
+        text:
+            "Encuentra 3 objetos diferentes y colocalos en el altar.",
+        difficulty:4
+    },
+
+    {
+        text:
+            "Llega hasta la zona prohibida y descubre que hay alli.",
+        difficulty:5
+    },
+
+    {
+        text:
+            "Encuentra el objeto que tenga exactamente el mismo color que vos.",
+        difficulty:2
+    },
+
+    {
+        text:
+            "Encuentra una zona escondida que ningun otro jugador haya visitado.",
+        difficulty:5
+    },
+
+    {
+        text:
+            "Encuentra dos objetos iguales y llevalos al punto central.",
+        difficulty:3
+    }
+
+];
+
+
+/* =========================================================
+   EVENTOS
+========================================================= */
+
+const events = [
+
+    {
+        name:"⚡ ALERTA",
+        description:
+            "Todos deben completar sus objetivos rapidamente."
+    },
+
+    {
+        name:"🌑 APAGON",
+        description:
+            "El mapa entra en modo oscuro durante un momento."
+    },
+
+    {
+        name:"🎯 DOBLE RECOMPENSA",
+        description:
+            "Las misiones completadas cuentan como doble progreso."
+    },
+
+    {
+        name:"🚨 SOSPECHA",
+        description:
+            "Durante este evento cualquiera puede ser sospechoso."
+    },
+
+    {
+        name:"⏳ TIEMPO EXTRA",
+        description:
+            "El equipo recibe una pequeña ventaja de tiempo."
+    }
+
+];
+
+
+/* =========================================================
+   JUGADORES
+========================================================= */
+
+let players = createPlayers();
+
+let currentPlayer = 0;
+
+let selectedVote = null;
+
+let selectedKillerTarget = null;
+
+let timerSeconds = 600;
+
+let timerInterval = null;
+
+let killerUsed = false;
+
+
+/* =========================================================
+   CREAR JUGADORES
+========================================================= */
+
+function createPlayers(){
+
+    return colors.map(
+
+        (color,index)=>({
+
+            name:
+                "Jugador "+(index+1),
+
+            color:color,
+
+            ready:false,
+
+            role:null,
+
+            mission:null,
+
+            viewed:false,
+
+            completed:false,
+
+            alive:true,
+
+            investigated:false
+
+        })
+
+    );
+
+}
+
+
+/* =========================================================
+   SHUFFLE
+========================================================= */
+
+function shuffle(array){
+
+    const copy=[...array];
+
+    for(
+        let i=copy.length-1;
+        i>0;
+        i--
+    ){
+
+        const j=
+            Math.floor(
+                Math.random()*(i+1)
+            );
+
+        [
+            copy[i],
+            copy[j]
+        ]=[
+            copy[j],
+            copy[i]
+        ];
+
+    }
+
+    return copy;
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(text){
+
+    return text.replace(
+
+        /[&<>"']/g,
+
+        character=>({
+
+            "&":"&amp;",
+            "<":"&lt;",
+            ">":"&gt;",
+            '"':"&quot;",
+            "'":"&#039;"
+
+        })[character]
+
+    );
+
+}
+
+
+/* =========================================================
+   PARTICULAS
+========================================================= */
+
+function createParticles(){
+
+    const container=
+        document.getElementById("particles");
+
+    for(
+        let i=0;
+        i<80;
+        i++
+    ){
+
+        const p=
+            document.createElement("div");
+
+        p.className="particle";
+
+        p.style.left=
+            Math.random()*100+"%";
+
+        p.style.animationDuration=
+            (8+Math.random()*18)+"s";
+
+        p.style.animationDelay=
+            (-Math.random()*18)+"s";
+
+        p.style.opacity=
+            .15+Math.random()*.35;
+
+        container.appendChild(p);
+
+    }
+}
+
+
+/* =========================================================
+   LOBBY
+========================================================= */
+
+function renderLobby(){
+
+    const container=
+        document.getElementById("players");
+
+    container.innerHTML="";
+
+
+    players.forEach(
+
+        (player,index)=>{
+
+            const card=
+                document.createElement("div");
+
+            card.className=
+                "player"+
+                (
+                    player.ready
+                    ?" ready"
+                    :""
+                );
+
+            card.style.setProperty(
+                "--playerColor",
+                player.color.hex
+            );
+
+
+            card.innerHTML=`
+
+                <div class="player-number">
+                    PERSONA ${index+1}
+                </div>
+
+                <div
+                    class="color-orb"
+                    style="
+                        --playerColor:${player.color.hex}
+                    "
+                ></div>
+
+                <div class="player-color-name">
+                    ${player.color.name}
+                </div>
+
+                <input
+                    id="playerName${index}"
+                    maxlength="18"
+                    value="${escapeHTML(player.name)}"
+                    placeholder="Tu nombre"
+                >
+
+                <button
+                    class="ready-btn"
+                    onclick="toggleReady(${index})"
+                >
+                    ${
+                        player.ready
+                        ?"✅ LISTO"
+                        :"MARCAR LISTO"
+                    }
+                </button>
+
+            `;
+
+            container.appendChild(card);
+
+        }
+
+    );
+
+
+    const readyCount=
+        players.filter(
+            p=>p.ready
+        ).length;
+
+
+    document.getElementById(
+        "status"
+    ).textContent=
+        readyCount+"/4 jugadores listos";
+
+
+    document.getElementById(
+        "startButton"
+    ).disabled=
+        readyCount!==4;
+
+}
+
+
+/* =========================================================
+   READY
+========================================================= */
+
+function toggleReady(index){
+
+    const input=
+        document.getElementById(
+            "playerName"+index
+        );
+
+    const name=
+        input.value.trim();
+
+    if(name){
+
+        players[index].name=
+            name;
+
+    }
+
+    players[index].ready=
+        !players[index].ready;
+
+    renderLobby();
+
+}
+
+
+/* =========================================================
+   INICIAR
+========================================================= */
+
+function startGame(){
+
+    const roles=
+        shuffle([
+            "ASESINO",
+            "SHERIFF",
+            "INOCENTE",
+            "INOCENTE"
+        ]);
+
+
+    const randomMissions=
+        shuffle(missions);
+
+
+    players.forEach(
+
+        (player,index)=>{
+
+            player.role=
+                roles[index];
+
+            player.mission=
+                randomMissions[index];
+
+            player.viewed=
+                false;
+
+            player.completed=
+                false;
+
+            player.alive=
+                true;
+
+            player.investigated=
+                false;
+
+        }
+
+    );
+
+
+    killerUsed=false;
+
+    currentPlayer=0;
+
+    document.getElementById(
+        "lobby"
+    ).style.display="none";
+
+
+    document.getElementById(
+        "missionScreen"
+    ).style.display="block";
+
+
+    showPrivateTurn();
+
+}
+
+
+/* =========================================================
+   TURNO PRIVADO
+========================================================= */
+
+function showPrivateTurn(){
+
+    const player=
+        players[currentPlayer];
+
+
+    document.getElementById(
+        "playerTitle"
+    ).textContent=
+        "PERSONA "+(currentPlayer+1);
+
+
+    const orb=
+        document.getElementById(
+            "missionColor"
+        );
+
+    orb.style.background=
+        player.color.hex;
+
+    orb.style.setProperty(
+        "--playerColor",
+        player.color.hex
+    );
+
+
+    const secretCard=
+        document.getElementById(
+            "secretCard"
+        );
+
+    const revealed=
+        document.getElementById(
+            "revealed"
+        );
+
+
+    secretCard.style.display=
+        "flex";
+
+    secretCard.style.transform=
+        "translateY(0)";
+
+    secretCard.style.opacity="1";
+
+    revealed.style.display="none";
+
+
+    document.getElementById(
+        "continueButton"
+    ).style.display="none";
+
+}
+
+
+/* =========================================================
+   REVELAR
+========================================================= */
+
+function revealPrivateInfo(){
+
+    const player=
+        players[currentPlayer];
+
+
+    if(player.viewed){
+
+        return;
+
+    }
+
+
+    player.viewed=true;
+
+
+    const secretCard=
+        document.getElementById(
+            "secretCard"
+        );
+
+
+    secretCard.style.transform=
+        "translateY(-380px)";
+
+    secretCard.style.opacity="0";
+
+
+    setTimeout(
+
+        ()=>{
+
+            secretCard.style.display=
+                "none";
+
+
+            showRoleAndMission();
+
+        },
+
+        450
+
+    );
+
+}
+
+
+/* =========================================================
+   MOSTRAR ROL
+========================================================= */
+
+function showRoleAndMission(){
+
+    const player=
+        players[currentPlayer];
+
+    const info=
+        roleInfo[player.role];
+
+
+    const revealed=
+        document.getElementById(
+            "revealed"
+        );
+
+
+    const roleName=
+        document.getElementById(
+            "roleName"
+        );
+
+
+    roleName.textContent=
+        info.icon+" "+player.role;
+
+
+    roleName.style.color=
+        info.color;
+
+
+    document.getElementById(
+        "roleDescription"
+    ).textContent=
+        info.description;
+
+
+    document.getElementById(
+        "missionText"
+    ).textContent=
+        player.mission.text;
+
+
+    document.getElementById(
+        "difficulty"
+    ).textContent=
+        "DIFICULTAD: "+
+        "⭐".repeat(
+            player.mission.difficulty
+        );
+
+
+    revealed.style.display=
+        "block";
+
+
+    document.getElementById(
+        "continueButton"
+    ).style.display=
+        "block";
+
+}
+
+
+/* =========================================================
+   CONTINUAR
+========================================================= */
+
+function nextPrivateTurn(){
+
+    currentPlayer++;
+
+
+    if(currentPlayer<players.length){
+
+        showHandoff();
+
+    }
+
+    else{
+
+        document.getElementById(
+            "missionScreen"
+        ).style.display=
+            "none";
+
+        showCountdown();
+
+    }
+
+}
+
+
+/* =========================================================
+   HANDOFF
+========================================================= */
+
+function showHandoff(){
+
+    document.getElementById(
+        "handoff"
+    ).style.display=
+        "flex";
+
+
+    document.getElementById(
+        "handoffTitle"
+    ).textContent=
+        "PASA EL DISPOSITIVO";
+
+
+    document.getElementById(
+        "handoffButton"
+    ).textContent=
+        "SOY PERSONA "+(currentPlayer+1);
+
+}
+
+
+/* =========================================================
+   COUNTDOWN
+========================================================= */
+
+function showCountdown(){
+
+    const overlay=
+        document.getElementById(
+            "countdown"
+        );
+
+    const number=
+        document.getElementById(
+            "countNumber"
+        );
+
+
+    overlay.style.display=
+        "flex";
+
+
+    let count=3;
+
+
+    number.textContent=count;
+
+
+    const interval=
+        setInterval(
+
+            ()=>{
+
+                count--;
+
+
+                if(count>0){
+
+                    number.textContent=
+                        count;
+
+                    number.style.animation="none";
+
+                    void number.offsetWidth;
+
+                    number.style.animation=
+                        "countPop .9s ease";
+
+                }
+
+                else{
+
+                    number.textContent=
+                        "GO!";
+
+
+                    setTimeout(
+
+                        ()=>{
+
+                            clearInterval(interval);
+
+                            overlay.style.display=
+                                "none";
+
+
+                            document.getElementById(
+                                "gameScreen"
+                            ).style.display=
+                                "block";
+
+
+                            renderGame();
+
+                            triggerEvent();
+
+                            startTimer();
+
+                        },
+
+                        800
+
+                    );
+
+                }
+
+            },
+
+            1000
+
+        );
+
+}
+
+
+/* =========================================================
+   EVENTO
+========================================================= */
+
+function triggerEvent(){
+
+    const event=
+        events[
+            Math.floor(
+                Math.random()*events.length
+            )
+        ];
+
+
+    document.getElementById(
+        "eventName"
+    ).textContent=
+        event.name;
+
+
+    document.getElementById(
+        "eventDescription"
+    ).textContent=
+        event.description;
+
+
+    document.getElementById(
+        "eventBox"
+    ).style.display=
+        "block";
+
+}
+
+
+/* =========================================================
+   TABLERO
+========================================================= */
+
+function renderGame(){
+
+    renderStatus();
+
+    updateProgress();
+
+}
+
+
+/* =========================================================
+   ESTADOS
+========================================================= */
+
+function renderStatus(){
+
+    const grid=
+        document.getElementById(
+            "statusGrid"
+        );
+
+
+    grid.innerHTML="";
+
+
+    players.forEach(
+
+        (player,index)=>{
+
+            const card=
+                document.createElement("div");
+
+            card.className=
+                "status-card";
+
+
+            card.style.setProperty(
+                "--playerColor",
+                player.color.hex
+            );
+
+
+            let state;
+
+
+            if(!player.alive){
+
+                state=
+                    "💀 Fuera de la partida";
+
+            }
+
+            else if(player.completed){
+
+                state=
+                    "✅ Mision completada";
+
+            }
+
+            else{
+
+                state=
+                    "🟢 En partida";
+
+            }
+
+
+            card.innerHTML=`
+
+                <div class="status-name">
+
+                    <span
+                        class="status-dot"
+                        style="
+                            --playerColor:${player.color.hex}
+                        "
+                    ></span>
+
+                    ${escapeHTML(player.name)}
+
+                </div>
+
+                <div class="status-state">
+
+                    ${state}
+
+                </div>
+
+            `;
+
+
+            grid.appendChild(card);
+
+        }
+
+    );
+
+}
+
+
+/* =========================================================
+   PROGRESO
+========================================================= */
+
+function updateProgress(){
+
+    const aliveInnocents=
+        players.filter(
+            p=>
+                p.role!=="ASESINO"
+                &&
+                p.alive
+                &&
+                p.completed
+        ).length;
+
+
+    document.getElementById(
+        "progressText"
+    ).textContent=
+        aliveInnocents+
+        " objetivos completados";
+
+
+    const percent=
+        Math.min(
+            100,
+            aliveInnocents*50
+        );
+
+
+    document.getElementById(
+        "progressFill"
+    ).style.width=
+        percent+"%";
+
+
+    checkVictory();
+
+}
+
+
+/* =========================================================
+   MODAL MISIONES
+========================================================= */
+
+function openMissionModal(){
+
+    const list=
+        document.getElementById(
+            "missionList"
+        );
+
+
+    list.innerHTML="";
+
+
+    players.forEach(
+
+        (player,index)=>{
+
+            const item=
+                document.createElement("div");
+
+            item.style.padding="15px";
+
+            item.style.marginBottom="10px";
+
+            item.style.borderRadius="15px";
+
+            item.style.background=
+                "rgba(255,255,255,.05)";
+
+
+            item.innerHTML=`
+
+                <b
+                    style="
+                        color:${player.color.hex}
+                    "
+                >
+                    ● ${escapeHTML(player.name)}
+                </b>
+
+                <br><br>
+
+                ${
+                    player.completed
+                    ?"✅ Objetivo completado"
+                    :"🟡 Objetivo pendiente"
+                }
+
+            `;
+
+
+            list.appendChild(item);
+
+        }
+
+    );
+
+
+    document.getElementById(
+        "missionModal"
+    ).style.display=
+        "flex";
+
+}
+
+
+/* =========================================================
+   REUNION
+========================================================= */
+
+function openMeeting(){
+
+    selectedVote=null;
+
+    const list=
+        document.getElementById(
+            "voteList"
+        );
+
+
+    list.innerHTML="";
+
+
+    players.forEach(
+
+        (player,index)=>{
+
+            if(!player.alive){
+
+                return;
+
+            }
+
+
+            const item=
+                document.createElement("div");
+
+
+            item.className=
+                "vote-player";
+
+
+            item.textContent=
+                "● "+player.name;
+
+
+            item.style.borderLeft=
+                "5px solid "+
+                player.color.hex;
+
+
+            item.onclick=
+                ()=>{
+
+                    document
+                        .querySelectorAll(
+                            ".vote-player"
+                        )
+                        .forEach(
+                            x=>
+                                x.classList.remove(
+                                    "selected"
+                                )
+                        );
+
+
+                    item.classList.add(
+                        "selected"
+                    );
+
+
+                    selectedVote=index;
+
+
+                    document.getElementById(
+                        "voteButton"
+                    ).disabled=false;
+
+
+                    document.getElementById(
+                        "voteResult"
+                    ).textContent=
+                        "Seleccionaste a "+
+                        player.name;
+
+                };
+
+
+            list.appendChild(item);
+
+        }
+
+    );
+
+
+    document.getElementById(
+        "meetingModal"
+    ).style.display=
+        "flex";
+
+}
+
+
+/* =========================================================
+   VOTAR
+========================================================= */
+
+function processVote(){
+
+    if(selectedVote===null){
+
+        return;
+
+    }
+
+
+    const target=
+        players[selectedVote];
+
+
+    const result=
+        document.getElementById(
+            "voteResult"
+        );
+
+
+    if(target.role==="ASESINO"){
+
+        target.alive=false;
+
+
+        result.innerHTML=
+            "🎯 ¡ACERTARON! "+
+            target.name+
+            " era el asesino.";
+
+        renderGame();
+
+
+        setTimeout(
+
+            ()=>{
+
+                closeModal("meetingModal");
+
+                checkVictory();
+
+            },
+
+            1800
+
+        );
+
+    }
+
+    else{
+
+        target.alive=false;
+
+
+        result.innerHTML=
+            "❌ Era inocente. "+
+            target.name+
+            " queda fuera de la partida.";
+
+        renderGame();
+
+
+        setTimeout(
+
+            ()=>{
+
+                closeModal("meetingModal");
+
+                checkVictory();
+
+            },
+
+            1800
+
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ACCION DEL ASESINO
+========================================================= */
+
+function openKillerAction(){
+
+    const killer=
+        players.find(
+            p=>
+                p.role==="ASESINO"
+                &&
+                p.alive
+        );
+
+
+    if(!killer){
+
+        alert(
+            "El asesino ya no esta en la partida."
+        );
+
+        return;
+
+    }
+
+
+    if(killerUsed){
+
+        alert(
+            "El asesino ya utilizo su accion."
+        );
+
+        return;
+
+    }
+
+
+    selectedKillerTarget=null;
+
+
+    const list=
+        document.getElementById(
+            "killerList"
+        );
+
+
+    list.innerHTML="";
+
+
+    players.forEach(
+
+        (player,index)=>{
+
+            if(
+                !player.alive
+                ||
+                player.role==="ASESINO"
+            ){
+
+                return;
+
+            }
+
+
+            const item=
+                document.createElement("div");
+
+
+            item.className=
+                "vote-player";
+
+
+            item.textContent=
+                "🎯 "+player.name;
+
+
+            item.style.borderLeft=
+                "5px solid "+
+                player.color.hex;
+
+
+            item.onclick=
+                ()=>{
+
+                    document
+                        .querySelectorAll(
+                            "#killerList .vote-player"
+                        )
+                        .forEach(
+                            x=>
+                                x.classList.remove(
+                                    "selected"
+                                )
+                        );
+
+
+                    item.classList.add(
+                        "selected"
+                    );
+
+
+                    selectedKillerTarget=index;
+
+
+                    document.getElementById(
+                        "killerButton"
+                    ).disabled=false;
+
+                };
+
+
+            list.appendChild(item);
+
+        }
+
+    );
+
+
+    document.getElementById(
+        "killerModal"
+    ).style.display=
+        "flex";
+
+}
+
+
+/* =========================================================
+   EJECUTAR ACCION DEL ASESINO
+========================================================= */
+
+function executeKillerAction(){
+
+    if(
+        selectedKillerTarget===null
+    ){
+
+        return;
+
+    }
+
+
+    players[selectedKillerTarget].alive=
+        false;
+
+
+    killerUsed=true;
+
+
+    closeModal("killerModal");
+
+
+    renderGame();
+
+
+    checkVictory();
+
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+function startTimer(){
+
+    clearInterval(timerInterval);
+
+
+    timerSeconds=600;
+
+
+    updateTimer();
+
+
+    timerInterval=
+        setInterval(
+
+            ()=>{
+
+                timerSeconds--;
+
+
+                updateTimer();
+
+
+                if(timerSeconds<=0){
+
+                    clearInterval(
+                        timerInterval
+                    );
+
+
+                    checkVictory(true);
+
+                }
+
+            },
+
+            1000
+
+        );
+
+}
+
+
+/* =========================================================
+   UPDATE TIMER
+========================================================= */
+
+function updateTimer(){
+
+    const minutes=
+        Math.floor(
+            timerSeconds/60
+        );
+
+
+    const seconds=
+        timerSeconds%60;
+
+
+    document.getElementById(
+        "timerValue"
+    ).textContent=
+        String(minutes).padStart(2,"0")+
+        ":"+
+        String(seconds).padStart(2,"0");
+
+}
+
+
+/* =========================================================
+   VICTORIA
+========================================================= */
+
+let gameEnded=false;
+
+
+function checkVictory(timeOut=false){
+
+    if(gameEnded){
+
+        return;
+
+    }
+
+
+    const killer=
+        players.find(
+            p=>p.role==="ASESINO"
+        );
+
+
+    const aliveInnocents=
+        players.filter(
+            p=>
+                p.role!=="ASESINO"
+                &&
+                p.alive
+        );
+
+
+    const completedInnocents=
+        aliveInnocents.filter(
+            p=>p.completed
+        );
+
+
+    /*
+       SHERIFF / INOCENTES GANAN
+       si el asesino queda fuera
+    */
+
+    if(
+        !killer.alive
+    ){
+
+        endGame(
+            "🏆",
+            "¡EL EQUIPO GANA!",
+            "El asesino fue descubierto y eliminado de la partida."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       ASESINO GANA
+       si todos los demas quedan fuera
+    */
+
+    if(
+        aliveInnocents.length<=0
+    ){
+
+        endGame(
+            "🔪",
+            "¡GANA EL ASESINO!",
+            "El asesino consiguio dejar fuera a todos los demas jugadores."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       EQUIPO GANA
+       si completan todas las misiones
+    */
+
+    if(
+        completedInnocents.length>=
+        aliveInnocents.length
+        &&
+        aliveInnocents.length>0
+    ){
+
+        endGame(
+            "🏆",
+            "¡MISIONES COMPLETADAS!",
+            "Los inocentes consiguieron completar todos sus objetivos."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       TIEMPO
+    */
+
+    if(timeOut){
+
+        endGame(
+            "⏰",
+            "¡SE ACABO EL TIEMPO!",
+            "La partida termino antes de que alguien pudiera completar el objetivo."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FINAL
+========================================================= */
+
+function endGame(
+    icon,
+    title,
+    text
+){
+
+    if(gameEnded){
+
+        return;
+
+    }
+
+
+    gameEnded=true;
+
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    document.getElementById(
+        "victoryIcon"
+    ).textContent=
+        icon;
+
+
+    document.getElementById(
+        "victoryTitle"
+    ).textContent=
+        title;
+
+
+    document.getElementById(
+        "victoryText"
+    ).innerHTML=
+        text+
+        "<br><br>"+
+        "El asesino era: <b>"+
+        escapeHTML(
+            players.find(
+                p=>p.role==="ASESINO"
+            ).name
+        )+
+        "</b>.";
+
+
+    document.getElementById(
+        "victory"
+    ).style.display=
+        "flex";
+
+}
+
+
+/* =========================================================
+   CERRAR MODAL
+========================================================= */
+
+function closeModal(id){
+
+    document.getElementById(
+        id
+    ).style.display=
+        "none";
+
+}
+
+
+/* =========================================================
+   REINICIAR
+========================================================= */
+
+function resetGame(){
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    players=createPlayers();
+
+    currentPlayer=0;
+
+    selectedVote=null;
+
+    selectedKillerTarget=null;
+
+    killerUsed=false;
+
+    gameEnded=false;
+
+
+    document.getElementById(
+        "victory"
+    ).style.display=
+        "none";
+
+
+    document.getElementById(
+        "gameScreen"
+    ).style.display=
+        "none";
+
+
+    document.getElementById(
+        "missionScreen"
+    ).style.display=
+        "none";
+
+
+    document.getElementById(
+        "lobby"
+    ).style.display=
+        "block";
+
+
+    document.getElementById(
+        "eventBox"
+    ).style.display=
+        "none";
+
+
+    renderLobby();
+
+}
+
+
+/* =========================================================
+   BOTONES
+========================================================= */
+
+document.getElementById(
+    "startButton"
+).addEventListener(
+    "click",
+    startGame
+);
+
+
+document.getElementById(
+    "continueButton"
+).addEventListener(
+    "click",
+    nextPrivateTurn
+);
+
+
+document.getElementById(
+    "handoffButton"
+).addEventListener(
+
+    "click",
+
+    ()=>{
+
+        document.getElementById(
+            "handoff"
+        ).style.display=
+            "none";
+
+        showPrivateTurn();
+
+    }
+
+);
+
+
+document.getElementById(
+    "missionAction"
+).addEventListener(
+    "click",
+    openMissionModal
+);
+
+
+document.getElementById(
+    "meetingButton"
+).addEventListener(
+    "click",
+    openMeeting
+);
+
+
+document.getElementById(
+    "voteButton"
+).addEventListener(
+    "click",
+    processVote
+);
+
+
+document.getElementById(
+    "closeMission"
+).addEventListener(
+
+    "click",
+
+    ()=>closeModal(
+        "missionModal"
+    )
+
+);
+
+
+document.getElementById(
+    "closeMeeting"
+).addEventListener(
+
+    "click",
+
+    ()=>closeModal(
+        "meetingModal"
+    )
+
+);
+
+
+document.getElementById(
+    "closeKiller"
+).addEventListener(
+
+    "click",
+
+    ()=>closeModal(
+        "killerModal"
+    )
+
+);
+
+
+document.getElementById(
+    "killerButton"
+).addEventListener(
+    "click",
+    executeKillerAction
+);
+
+
+document.getElementById(
+    "restartButton"
+).addEventListener(
+    "click",
+    resetGame
+);
+
+
+document.getElementById(
+    "victoryButton"
+).addEventListener(
+    "click",
+    resetGame
+);
+
+
+/* =========================================================
+   SWIPE
+========================================================= */
+
+const secretCard=
+    document.getElementById(
+        "secretCard"
+    );
+
+let startY=0;
+
+let currentY=0;
+
+let dragging=false;
+
+
+secretCard.addEventListener(
+
+    "touchstart",
+
+    event=>{
+
+        startY=
+            event.touches[0].clientY;
+
+        currentY=startY;
+
+    },
+
+    {passive:true}
+
+);
+
+
+secretCard.addEventListener(
+
+    "touchmove",
+
+    event=>{
+
+        currentY=
+            event.touches[0].clientY;
+
+
+        const distance=
+            currentY-startY;
+
+
+        if(distance<0){
+
+            secretCard.style.transform=
+                `translateY(${distance}px)`;
+
+        }
+
+    },
+
+    {passive:true}
+
+);
+
+
+secretCard.addEventListener(
+
+    "touchend",
+
+    ()=>{
+
+        const distance=
+            currentY-startY;
+
+
+        if(distance<-100){
+
+            revealPrivateInfo();
+
+        }
+
+        else{
+
+            secretCard.style.transform=
+                "translateY(0)";
+
+        }
+
+    }
+
+);
+
+
+/* =========================================================
+   MOUSE SWIPE
+========================================================= */
+
+secretCard.addEventListener(
+
+    "mousedown",
+
+    event=>{
+
+        dragging=true;
+
+        startY=
+            event.clientY;
+
+        currentY=startY;
+
+        secretCard.classList.add(
+            "dragging"
+        );
+
+    }
+
+);
+
+
+document.addEventListener(
+
+    "mousemove",
+
+    event=>{
+
+        if(!dragging){
+
+            return;
+
+        }
+
+
+        currentY=
+            event.clientY;
+
+
+        const distance=
+            currentY-startY;
+
+
+        if(distance<0){
+
+            secretCard.style.transform=
+                `translateY(${distance}px)`;
+
+        }
+
+    }
+
+);
+
+
+document.addEventListener(
+
+    "mouseup",
+
+    ()=>{
+
+        if(!dragging){
+
+            return;
+
+        }
+
+
+        dragging=false;
+
+
+        secretCard.classList.remove(
+            "dragging"
+        );
+
+
+        const distance=
+            currentY-startY;
+
+
+        if(distance<-100){
+
+            revealPrivateInfo();
+
+        }
+
+        else{
+
+            secretCard.style.transform=
+                "translateY(0)";
+
+        }
+
+    }
+
+);
+
+
+/* =========================================================
+   CLICK PARA REVELAR
+========================================================= */
+
+secretCard.addEventListener(
+
+    "click",
+
+    ()=>{
+
+        if(
+            !players[currentPlayer].viewed
+        ){
+
+            revealPrivateInfo();
+
+        }
+
+    }
+
+);
+
+
+/* =========================================================
+   DOBLE CLICK EN EL TABLERO
+   PARA ABRIR ACCION DEL ASESINO
+========================================================= */
+
+document.getElementById(
+    "gameScreen"
+).addEventListener(
+
+    "dblclick",
+
+    event=>{
+
+        /*
+           Esta funcion queda como
+           acceso especial del juego.
+
+           En una version con varios dispositivos
+           podria reemplazarse por una interfaz
+           privada para el asesino.
+        */
+
+    }
+
+);
+
+
+/* =========================================================
+   ATAJO: BOTON OCULTO PARA ASESINO
+========================================================= */
+
+document.addEventListener(
+
+    "keydown",
+
+    event=>{
+
+        /*
+           Tecla K abre la accion del asesino.
+           Es una mecanica del videojuego.
+        */
+
+        if(
+            event.key.toLowerCase()==="k"
+            &&
+            !gameEnded
+        ){
+
+            const killer=
+                players.find(
+                    p=>
+                        p.role==="ASESINO"
+                        &&
+                        p.alive
+                );
+
+
+            if(killer){
+
+                openKillerAction();
+
+            }
+
+        }
+
+    }
+
+);
+
+
+/* =========================================================
+   INICIO
+========================================================= */
+
+createParticles();
+
+renderLobby();
+
+</script>
+
+</body>
+</html>
